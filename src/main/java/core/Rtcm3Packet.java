@@ -3,7 +3,7 @@ package core;
 public class Rtcm3Packet {
 
     private final ILogger logger;
-    private final int msgType;
+    public final int msgType;
     private final byte[] headerBytes, payload, crc;
 
     public Rtcm3Packet(ILogger logger, int msgType, byte[] headerBytes, byte[] payload, byte[] crc) {
@@ -24,8 +24,9 @@ public class Rtcm3Packet {
     }
 
     public byte[] getPacket() {
-        byte[] packet = new byte[headerBytes.length + payload.length + crc.length];
-        int counter = 0;
+        byte[] packet = new byte[1 + headerBytes.length + payload.length + crc.length];
+        packet[0] = (byte) 0xD3;        // RTCM3 Identifier
+        int counter = 1;
         for (byte b : headerBytes) {
             packet[counter] = b;
             counter++;
